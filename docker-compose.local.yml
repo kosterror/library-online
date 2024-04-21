@@ -1,0 +1,15 @@
+services:
+  db:
+    container_name: library-online-db
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=library-online
+      - POSTGRES_USER=library-online
+      - POSTGRES_PASSWORD=library-online
+    volumes:
+      - library-online-db:/var/lib/postgresql/data
+
+volumes:
+  library-online-db: { }

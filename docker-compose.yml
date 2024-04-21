@@ -1,0 +1,17 @@
+services:
+  backend:
+    container_name: library-online-back
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/library-online
+  db:
+    extends:
+      file: docker-compose.local.yml
+      service: db
+
+volumes:
+  library-online-db: { }
