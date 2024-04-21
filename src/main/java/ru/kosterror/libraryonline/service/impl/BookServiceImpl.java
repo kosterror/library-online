@@ -11,12 +11,17 @@ import ru.kosterror.libraryonline.dto.book.BookDto;
 import ru.kosterror.libraryonline.dto.book.NewBookDto;
 import ru.kosterror.libraryonline.dto.book.UpdateBookDto;
 import ru.kosterror.libraryonline.entity.BookEntity;
+import ru.kosterror.libraryonline.entity.PersonBookEntity;
+import ru.kosterror.libraryonline.entity.PersonEntity;
 import ru.kosterror.libraryonline.exception.ConflictException;
 import ru.kosterror.libraryonline.exception.NotFoundException;
 import ru.kosterror.libraryonline.mapper.BookMapper;
 import ru.kosterror.libraryonline.repository.BookRepository;
+import ru.kosterror.libraryonline.repository.PersonBookRepository;
 import ru.kosterror.libraryonline.service.BookService;
+import ru.kosterror.libraryonline.service.PersonService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -29,6 +34,8 @@ public class BookServiceImpl implements BookService {
     private static final String NAME = "name";
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final PersonService personService;
+    private final PersonBookRepository personBookRepository;
 
     @Override
     @Transactional
@@ -75,6 +82,20 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toList());
 
         return new PaginationResponse<>(bookPage.getNumber(), bookPage.getSize(), books);
+    }
+
+    @Override
+    public void takeBook(UUID bookId, UUID personId) {
+        BookEntity book = findBookById(bookId);
+        PersonEntity person = personService.findPersonById(personId);
+
+        PersonBookEntity personBook = PersonBookEntity.builder()
+                .book(book)
+                .person(person)
+                .takenDate(new Date())
+                .build();
+
+        personBookRepository.save(personBook);
     }
 
     private BookEntity findBookById(UUID id) {

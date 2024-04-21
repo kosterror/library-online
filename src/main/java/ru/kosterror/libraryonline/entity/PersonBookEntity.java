@@ -1,6 +1,9 @@
 package ru.kosterror.libraryonline.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,6 +13,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "person_book")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PersonBookEntity {
 
     @Id

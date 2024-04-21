@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kosterror.libraryonline.dto.PaginationResponse;
 import ru.kosterror.libraryonline.dto.person.NewPersonDto;
 import ru.kosterror.libraryonline.dto.person.PersonDto;
+import ru.kosterror.libraryonline.dto.person.ReadingPersonDto;
 import ru.kosterror.libraryonline.dto.person.UpdatePersonDto;
+import ru.kosterror.libraryonline.entity.PersonBookEntity;
 import ru.kosterror.libraryonline.entity.PersonEntity;
 import ru.kosterror.libraryonline.exception.NotFoundException;
 import ru.kosterror.libraryonline.mapper.PersonMapper;
+import ru.kosterror.libraryonline.repository.PersonBookRepository;
 import ru.kosterror.libraryonline.repository.PersonRepository;
 import ru.kosterror.libraryonline.service.PersonService;
 
@@ -30,6 +33,7 @@ public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
+    private final PersonBookRepository personBookRepository;
 
     @Override
     @Transactional
@@ -73,10 +77,20 @@ public class PersonServiceImpl implements PersonService {
         return new PaginationResponse<>(personPage.getNumber(), personPage.getSize(), persons);
     }
 
-    private PersonEntity findPersonById(UUID id) {
+    @Override
+    public PersonEntity findPersonById(UUID id) {
         return personRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Person with id '%s' was not found", id)));
+    }
+
+    @Override
+    public List<ReadingPersonDto> getReadingPersons() {
+        List<PersonBookEntity> entities = personBookRepository.findAll();
+
+        return entities.stream()
+                .map(personMapper::personBookEntityToReadingPerson)
+                .collect(Collectors.toList());
     }
 
 }

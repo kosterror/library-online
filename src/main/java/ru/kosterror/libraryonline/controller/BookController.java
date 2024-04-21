@@ -1,7 +1,9 @@
 package ru.kosterror.libraryonline.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kosterror.libraryonline.dto.PaginationResponse;
 import ru.kosterror.libraryonline.dto.book.BookDto;
@@ -47,4 +49,10 @@ public class BookController {
         return bookService.getBookPage(page, size);
     }
 
+    @Operation(summary = "Take book for reading", responses = @ApiResponse(responseCode = "204"))
+    @PostMapping("/{bookId}/take")
+    public ResponseEntity<Void> takeBook(@PathVariable UUID bookId, @RequestParam UUID personId) {
+        bookService.takeBook(bookId, personId);
+        return ResponseEntity.status(204).build();
+    }
 }

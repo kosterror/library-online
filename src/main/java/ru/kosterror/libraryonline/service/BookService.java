@@ -15,4 +15,6 @@ public interface BookService {
     BookDto updateBook(UUID id, UpdateBookDto updateBookDto);
 
     PaginationResponse<BookDto> getBookPage(int page, int size);
+
+    void takeBook(UUID bookId, UUID personId);
 }
