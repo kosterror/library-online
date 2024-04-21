@@ -9,6 +9,7 @@ import ru.kosterror.libraryonline.dto.book.NewBookDto;
 import ru.kosterror.libraryonline.dto.book.UpdateBookDto;
 import ru.kosterror.libraryonline.service.BookService;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -20,7 +21,7 @@ public class BookController {
 
     @Operation(summary = "Create new book")
     @PostMapping
-    public BookDto createBook(@RequestBody NewBookDto newBookDto) {
+    public BookDto createBook(@RequestBody @Valid NewBookDto newBookDto) {
         return bookService.createBook(newBookDto);
     }
 
@@ -33,7 +34,7 @@ public class BookController {
     @Operation(summary = "Update book")
     @PutMapping("/{id}")
     public BookDto updateBook(@PathVariable UUID id,
-                              @RequestBody UpdateBookDto updateBookDto
+                              @RequestBody @Valid UpdateBookDto updateBookDto
     ) {
         return bookService.updateBook(id, updateBookDto);
     }
