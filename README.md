@@ -16,7 +16,7 @@ docker compose up -d
 ### БД в Docker-контейнере, приложение локально
 
 ```bash
-docker compose up -f docker-compose.local.yml -d
-mvn package
-java -jar ./target/library-online-0.0.1.jar
+$ docker compose -f docker-compose.local.yml up -d
+$ mvn package
+$ java -jar ./target/library-online-0.0.1.jar
 ```
